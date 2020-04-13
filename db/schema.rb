@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200413192425) do
+ActiveRecord::Schema.define(version: 20200413204318) do
 
   create_table "dogs", force: :cascade do |t|
     t.string  "name"
@@ -26,6 +26,12 @@ ActiveRecord::Schema.define(version: 20200413192425) do
     t.integer "trait_id"
   end
 
+  create_table "shelter_users", force: :cascade do |t|
+    t.integer "shelter_id"
+    t.integer "user_id"
+    t.boolean "is_foster_parent", null: false
+  end
+
   create_table "shelters", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -36,9 +42,8 @@ ActiveRecord::Schema.define(version: 20200413192425) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string  "username"
-    t.string  "address"
-    t.integer "shelter_id"
+    t.string "username"
+    t.string "address"
   end
 
   create_table "users_traits", force: :cascade do |t|
