@@ -1,0 +1,4 @@
+Dog.destroy_all
+Shelter.destroy_all
+Trait.destroy_all
+User.destroy_all
