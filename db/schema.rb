@@ -41,14 +41,14 @@ ActiveRecord::Schema.define(version: 20200413204318) do
     t.string "trait_name"
   end
 
+  create_table "traits_users", force: :cascade do |t|
+    t.integer "trait_id"
+    t.integer "user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "address"
-  end
-
-  create_table "users_traits", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "trait_id"
   end
 
 end
