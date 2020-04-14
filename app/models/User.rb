@@ -4,21 +4,14 @@ class User < ActiveRecord::Base
   has_many :dogs, :foreign_key => 'owner_id'
   has_and_belongs_to_many :traits
 
-  def is_adopter?
-
-  end
-
-  def is_foster?
-
-  end
-
-  def type_of_user
-    if self.is_adopter?
-      "adopter"
-    elsif self.is_foster?
-      "foster"
-    else
-      "none"
+  def is_foster_parent?
+    if self.memberships.length > 0
+      self.memberships.each do |m|
+        if m.is_foster_parent
+          return true
+        end
+      end
     end
+    return false
   end
 end
