@@ -1,11 +1,13 @@
 require_relative '../config/environment'
 
-def main_menu
+def main_menu(user)
   puts ""
   puts "============================="
   puts "|         Main Menu         |"
   puts "============================="
-  puts ""    
+  puts ""
+
+  if user.
 end
 
 def welcome
@@ -13,7 +15,7 @@ def welcome
   puts "|  Wecome to Furry Finder!  |"
   puts "============================="
   user = login
-  main_menu
+  main_menu(user)
 end
 
 def login

@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20200413204318) do
   create_table "shelter_users", force: :cascade do |t|
     t.integer "shelter_id"
     t.integer "user_id"
-    t.boolean "is_foster_parent", null: false
+    t.boolean "is_foster_parent"
   end
 
   create_table "shelters", force: :cascade do |t|
