@@ -1,7 +1,7 @@
 class Shelter < ActiveRecord::Base
   has_many :dogs
-  has_many :shelter_users
-  has_many :users, through: :shelter_users
+  has_many :memberships
+  has_many :users, through: :memberships
 
   def create_dog(name, age, breed, traits)
     Dog.new(name, age, breed)

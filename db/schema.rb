@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20200413204318) do
     t.integer "trait_id"
   end
 
-  create_table "shelter_users", force: :cascade do |t|
+  create_table "memberships", force: :cascade do |t|
     t.integer "shelter_id"
     t.integer "user_id"
     t.boolean "is_foster_parent"

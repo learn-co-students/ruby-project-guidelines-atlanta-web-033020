@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-  has_many :shelter_users
-  has_many :shelters, through: :shelter_users
+  has_many :memberships
+  has_many :shelters, through: :memberships
   has_many :dogs, :foreign_key => 'owner_id'
   has_and_belongs_to_many :traits
 
@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     elsif self.is_foster?
       "foster"
     else
-      nil
+      "none"
     end
   end
 end
