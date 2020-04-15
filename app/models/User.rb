@@ -8,10 +8,9 @@ class User < ActiveRecord::Base
     self.memberships.length > 0 ? true : false
   end
 
-  def update_traits(trait_nums)
+  def update_traits(trait_strings)
     self.traits = []
-    trait_nums = trait_nums.map { |t| t.strip } # remove white space
-    traits = trait_nums.map { |t| Trait.all[t.to_i - 1] } # convert to trait instance
+    traits = trait_strings.map { |ts| Trait.find_by(trait_name: ts) }
     self.traits << traits
   end
 
@@ -20,8 +19,8 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def update_breed_preference(dog_breeds, breed)
-    self.dog_breed_preference = dog_breeds[breed.to_i - 1]
+  def update_breed_preference(breed)
+    self.dog_breed_preference = breed
     self.save
   end
 

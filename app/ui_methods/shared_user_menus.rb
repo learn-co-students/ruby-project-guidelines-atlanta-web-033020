@@ -1,24 +1,75 @@
 def join_shelter_menu(user)
-  selection_valid = false
-  options = []
   shelters = Shelter.shelters_not_joined(user)
 
-  while !selection_valid
-    index = 1
-    puts ""
-    puts "Which shelter would you like to join?"
-    shelters.each do |shelter|
-      puts "#{index}. #{shelter.name} at #{shelter.address}"
-      options << index.to_s
-      index += 1
+  choice = PROMPT.select("Which shelter would you like to join?") do |menu|
+    shelters.each_with_index do |s, i|
+      menu.choice "#{s.name} at #{s.address}", i
     end
-    puts ""
-    selection = gets.chomp
-    
-    selection_valid = check_valid_selection(options, selection)
   end
 
-  user.join_shelter(shelters[selection.to_i - 1])
+  user.join_shelter(shelters[choice])
+end
+
+def update_profile_menu(user)
+  puts ""
+  choices = ["Address", "Traits", "Desired Dog Breed", "Desired Dog Age", "Back to Main Menu"]
+  choice = PROMPT.select("What would you like to update?", choices)
+  
+  case choice
+  when 0
+    address_menu(user)
+  when 1
+    traits_menu(user)
+  when 2
+    desired_dog_breed_menu(user)
+  when 3
+    desired_dog_age_menu(user)
+  end
+end
+
+def address_menu(user)
+  puts ""
+  puts "Enter your address"
+  address = gets.chomp
+  user.update_address(address)
+end
+
+def traits_menu(user)
+  puts ""
+
+  choices = Trait.all.each_with_index.map { |t, i| "#{t.trait_name}" }
+  choice = PROMPT.multi_select("Select your traits:", choices)
+
+  user.update_traits(choice)
+end
+
+def desired_dog_breed_menu(user)
+  puts ""
+
+  choices = Dog.all.map { |dog| dog.breed }.uniq
+  choice = PROMPT.select("Select your desired dog breed", choices)
+
+  user.update_breed_preference(choice)
+end
+
+def desired_dog_age_menu(user)
+  puts ""
+  puts "Enter your desired dog age"
+  age = PROMPT.ask("Age:")
+  user.update_dog_age_preference(age)
+end
+
+def show_user_criteria(user)
+  puts "Breed: #{user.dog_breed_preference}"
+  puts "Age:  #{user.dog_age_preference}"
+  user.traits.each_with_index do |t, i|
+    if i == 0
+      puts "Traits: #{t.trait_name}"
+    else
+      puts "        #{t.trait_name}"
+    end
+  end
+  puts ""
 end
 
 def adopt_from_foster_menu(user)
@@ -91,45 +142,32 @@ def check_valid_selection(options, selection)
 end
 
 def update_dog_menu(dog)
-  selection_valid = false
-  options = ["1", "2", "3", "4"]
+  puts ""
+  choices = ["Name", "Age", "Breed", "Traits", "Back to Main Menu"]
+  choice = PROMPT.select("What would you like to update?", choices)
 
-  while !selection_valid
-    puts ""
-    puts "What would you like to update?"
-    puts "1. Name"
-    puts "2. Age"
-    puts "3. Breed"
-    puts "4. Traits"
-    puts "5. Main Menu"
-    selection = gets.chomp
-    
-    if selection == "1"
-      dog.update_name(get_dog_name)
-    elsif selection == "2"
-      dog.update_age(get_dog_age)
-    elsif selection == "3"
-      dog.update_breed(get_dog_breed)
-    elsif selection == "4"
-      dog.update_traits(get_dog_traits)
-    elsif selection == "5"
-      break
-    end
-
-    selection_valid = check_valid_selection(options, selection)
+  case choice
+  when "Name"
+    dog.update_name(get_dog_name)
+  when "Age"
+    dog.update_age(get_dog_age)
+  when "Breed"
+    dog.update_breed(get_dog_breed)
+  when "Traits"
+    dog.update_traits(get_dog_traits)
   end
 end
 
 def get_dog_name
   puts ""
   puts "Enter the dog's name"
-  gets.chomp
+  PROMPT.ask("Name:")
 end
 
 def get_dog_age
   puts ""
   puts "Enter the dog's age"
-  gets.chomp.to_i
+  PROMPT.ask("Age:").to_i
 end
 
 def get_dog_breed
