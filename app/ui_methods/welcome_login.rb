@@ -15,12 +15,15 @@ def login
   end
 
   if username_input.downcase == "shelter"
+    LoggedInUser.type = "shelter"
     shelter_login
     return nil
+  else
+    LoggedInUser.type = "user"
   end
 
-  user = User.find_by(username: username_input)
-
+  user = LoggedInUser.user = User.find_by(username: username_input)
+  
   while !user
     puts ""
     puts "That user does not exist. Would you like to create the user #{username_input}?"
@@ -29,13 +32,11 @@ def login
     selection = gets.chomp
     if selection == "1"
       user = User.create(username: username_input)
-      LoggedInUser.username = user.username
+      LoggedInUser.user = user
     elsif selection == "2"
       break
     end
   end
-
-  user
 end
 
 def shelter_login
@@ -59,5 +60,5 @@ def shelter_login
     selection_valid = check_valid_selection(options, selection)
   end
 
-  shelter_menu(Shelter.all[selection.to_i - 1])
+  LoggedInUser.shelter = Shelter.all[selection.to_i - 1]
 end

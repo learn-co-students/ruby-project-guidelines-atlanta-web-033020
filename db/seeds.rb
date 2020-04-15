@@ -13,8 +13,10 @@ breeds = []
 end
 
 50.times do
-  User.create(username: Faker::Internet.username, address: Faker::Address.full_address)
+  User.create(username: Faker::Internet.username, address: Faker::Address.full_address, dog_breed_preference: breeds.sample, dog_age_preference: rand(0..15))
 end
+
+User.create(username: "hoobie4792", address: "113 Springfield Blvd", dog_breed_preference: breeds[5], dog_age_preference: 5)
 
 10.times do
   Shelter.create(name: Faker::Creature::Dog.meme_phrase.capitalize + " Shelter", address: Faker::Address.full_address)

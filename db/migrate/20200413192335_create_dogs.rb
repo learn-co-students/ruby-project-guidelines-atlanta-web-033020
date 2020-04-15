@@ -4,7 +4,7 @@ class CreateDogs < ActiveRecord::Migration[5.0]
       t.string :name
       t.integer :age
       t.string :breed
-      t.boolean :adoption_ready, null: false, default: false
+      t.boolean :adoption_ready
       t.integer :shelter_id
       t.integer :owner_id
     end

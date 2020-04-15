@@ -1,11 +1,29 @@
 class LoggedInUser
-  @@username
+  @@user = nil
+  @@shelter = nil
+  @@type = nil
 
-  def self.username
-    @@username
+  def self.user
+    @@user
   end
 
-  def self.username=(username)
-    @@username = username
+  def self.user=(user)
+    @@user = user
+  end
+
+  def self.shelter
+    @@shelter
+  end
+
+  def self.shelter=(shelter)
+    @@shelter = shelter
+  end
+
+  def self.type
+    @@type
+  end
+
+  def self.type=(type)
+    @@type = type
   end
 end

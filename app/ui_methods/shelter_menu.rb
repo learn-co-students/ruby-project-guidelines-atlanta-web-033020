@@ -1,10 +1,4 @@
 def shelter_menu(shelter)
-  puts ""
-  puts "============================="
-  puts "|       Shelter Menu        |"
-  puts "============================="
-  puts ""
-  
   selection_valid = false
   options = ["1", "2", "3", "4", "5"]
 
@@ -14,7 +8,7 @@ def shelter_menu(shelter)
   puts "2. Update shelter address"
   puts "3. Add dog"
   puts "4. Update dog"
-  puts "5. Quit"
+  puts "5. Logout"
 
   while !selection_valid
     selection = gets.chomp
@@ -28,6 +22,7 @@ def shelter_menu(shelter)
     elsif selection == "4"
       shelter_select_dog_to_update_menu(shelter)
     elsif selection == "5" || selection.downcase == "quit"
+      logout
       return true
     end
 

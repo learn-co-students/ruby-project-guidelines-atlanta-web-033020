@@ -1,4 +1,4 @@
-def main_menu(user)
+def main_menu
   puts ""
   puts "============================="
   puts "|         Main Menu         |"
@@ -6,9 +6,14 @@ def main_menu(user)
   puts ""
 
   # If not linked with a shelter, the user is specified as an adopter
-  if user.is_foster_parent?
-    foster_menu(user)
+  if LoggedInUser.type == "shelter"
+    shelter_menu(LoggedInUser.shelter)
   else
-    adopter_menu(user)
+    if LoggedInUser.user.is_foster_parent?
+      foster_menu(LoggedInUser.user)
+    else
+      adopter_menu(LoggedInUser.user)
+    end
   end
+  
 end

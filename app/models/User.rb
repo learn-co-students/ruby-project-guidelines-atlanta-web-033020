@@ -5,14 +5,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :traits
 
   def is_foster_parent?
-    if self.memberships.length > 0
-      self.memberships.each do |m|
-        if m.is_foster_parent
-          return true
-        end
-      end
-    end
-    return false
+    self.memberships.length > 0 ? true : false
   end
 
   def update_traits(trait_nums)
@@ -35,5 +28,24 @@ class User < ActiveRecord::Base
   def update_dog_age_preference(age)
     self.dog_age_preference = age
     self.save
+  end
+
+  def find_compatible_dogs
+    dogs = []
+    Dog.adoptable_dogs.each do |d|
+      dogs << { dog: d, dog_score: d.compute_dog_score(self) }
+    end
+    ranked_dogs = dogs.sort_by { |dog_hash| dog_hash[:dog_score] }
+  end
+
+  def adopt_dog(dog)
+    dog.adoption_ready = false
+    dog.shelter = nil
+    dog.save
+    self.dogs << dog
+  end
+
+  def join_shelter(shelter)
+    shelter.users << self
   end
 end

@@ -14,8 +14,9 @@ class Shelter < ActiveRecord::Base
   end
 
   def add_dog(name, age, breed, traits)
-    dog = Dog.create(name: name, age: age, breed: breed, shelter_id: self.id)
+    dog = Dog.create(name: name, age: age, breed: breed)
     dog.traits << traits
+    self.dogs << dog
   end
 
   def update_dog(dog, name, age, breed, traits)
@@ -24,5 +25,9 @@ class Shelter < ActiveRecord::Base
     dog.age = age
     dog.breed = breed
     dog.save
+  end
+
+  def self.shelters_not_joined(user)
+    Shelter.all - user.shelters
   end
 end
