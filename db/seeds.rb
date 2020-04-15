@@ -33,7 +33,7 @@ Trait.create(trait_name: "always hungry")
 Trait.create(trait_name: "happy")
 Trait.create(trait_name: "chill")
 
-# Assign random traits to dogs
+# Assign random traits and shelters to dogs
 Dog.all.each do |d|
   dog_traits = [] 
   traits_length = Trait.all.length
@@ -44,6 +44,8 @@ Dog.all.each do |d|
       d.traits << rand_trait
     end
   end
+
+  Shelter.all.sample.dogs << d
 end
 
 # Assign random traits to users

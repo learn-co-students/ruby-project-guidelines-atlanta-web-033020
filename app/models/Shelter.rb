@@ -3,8 +3,19 @@ class Shelter < ActiveRecord::Base
   has_many :memberships
   has_many :users, through: :memberships
 
-  def create_dog(name, age, breed, traits)
-    Dog.new(name, age, breed)
+  def update_name(name)
+    self.name = name
+    self.save
+  end
+
+  def update_address(address)
+    self.address = address
+    self.save
+  end
+
+  def add_dog(name, age, breed, traits)
+    dog = Dog.create(name: name, age: age, breed: breed, shelter_id: self.id)
+    dog.traits << traits
   end
 
   def update_dog(dog, name, age, breed, traits)
