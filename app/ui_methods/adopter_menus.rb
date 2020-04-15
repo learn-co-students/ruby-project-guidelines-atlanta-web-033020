@@ -116,33 +116,3 @@ def show_user_criteria(user)
   end
   puts ""
 end
-
-def show_list_of_compatible_dogs(user)
-  dogs = user.find_compatible_dogs.map { |d| d[:dog]}[0...20]
-  puts ""
-  table = TTY::Table.new header: ['', 'Name', 'Breed', 'Age', 'Traits']
-  dogs.each_with_index do |d, i|
-    index = 0
-    traits = d.traits
-    loop do
-      if index == 0
-        table << [i + 1, d.name, d.breed, d.age, traits[index] == nil ? "" : traits[index].trait_name]
-      else
-        table << ["", "", "", "", traits[index].trait_name]
-      end
-      index += 1
-      break if index >= traits.length
-    end
-  end
-  puts table.render(:unicode)
-  dogs
-end
-
-def check_valid_selection(options, selection)
-  if options.include? selection
-    true
-  else
-    puts "Invalid selection received. Please choose again."
-    false
-  end
-end

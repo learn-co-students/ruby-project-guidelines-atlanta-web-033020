@@ -30,4 +30,8 @@ class Shelter < ActiveRecord::Base
   def self.shelters_not_joined(user)
     Shelter.all - user.shelters
   end
+
+  def unfostered_dogs
+    self.dogs.select { |dog| dog.owner_id == nil }
+  end
 end
