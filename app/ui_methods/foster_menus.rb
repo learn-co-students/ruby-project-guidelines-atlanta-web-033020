@@ -22,8 +22,8 @@ def foster_menu(user)
       explore_shelter_dogs_menu(user)
     elsif selection == "4"
       manage_fostered_dogs_menu(user)
-    elseif selection == "5"
-      join_shelter(user)
+    elsif selection == "5"
+      join_shelter_menu(user)
     elsif selection == "6" || selection.downcase == "quit"
       logout
       return true

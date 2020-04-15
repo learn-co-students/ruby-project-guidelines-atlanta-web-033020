@@ -46,6 +46,6 @@ class User < ActiveRecord::Base
   end
 
   def join_shelter(shelter)
-    shelter.users << self
+    self.shelters << shelter
   end
 end
