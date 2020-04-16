@@ -1,9 +1,11 @@
 def foster_menu(user)
-  choices = ["Update Profile", "Adopt a Dog", "Adopt a Shelter Dog",
+  choices = ["View Profile", "Update Profile", "Adopt a Dog", "Adopt a Shelter Dog",
     "Manage Foster Dogs","Join Another Shelter", "Logout"]
-  choice = PROMPT.select("Selection an option below:", choices)
+  choice = PROMPT.select("Selection an option below:", choices, per_page: 8)
 
   case choice
+  when "View Profile"
+    view_profile(user)
   when "Update Profile"
     update_profile_menu(user)
   when "Adopt a Dog"
@@ -33,38 +35,31 @@ def foster_adopt_dog_menu(user)
 end
 
 def adopt_from_shelter_menu(user)
-  selection_valid = false
-  options = []
-  dogs = []
-  selection = nil
-
-  user.shelters.each { |shelter| dogs += shelter.unfostered_dogs }
-  dogs.each_with_index { |d, i| options << (i + 1).to_s}
-
+  dogs = user.shelters.each.map { |s| s.unfostered_dogs }.flatten
   show_list_of_dogs(dogs)
 
   if dogs.empty?
     puts "Looks like there are no dogs in your shelter(s)!"
+    puts "Press enter to return to the main menu."
+    gets.chomp
   else
-    puts "Please select a dog to adopt or type \"quit\" to quit"
-    while !selection_valid do
-      selection = gets.chomp
-      if selection == "quit"
-        break
+    choice = PROMPT.select("Please select a dog to adopt", per_page: 10) do |menu|
+      dogs.each_with_index do |d, i|
+        menu.choice "#{i + 1}. #{d.name} the #{d.breed}", i
       end
-      selection_valid = check_valid_selection(options, selection)
+      menu.choice "Nevermind, I don't want to adopt"
     end
-
-    if selection != "quit"
-      new_best_friend = dogs[selection.to_i - 1]
+    
+    if choice != "Nevermind, I don't want to adopt"
+      new_best_friend = dogs[choice]
       user.adopt_dog(new_best_friend)
     
       puts "#{new_best_friend.name} will make a lovely addition to your home!"
+
+      puts "Press enter to return to the main menu."
+      gets.chomp
     end
   end
-
-  puts "Press enter to return to the main menu."
-  gets.chomp
 end
 
 def show_list_of_dogs(dogs)

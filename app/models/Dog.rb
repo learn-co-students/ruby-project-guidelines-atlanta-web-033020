@@ -22,9 +22,9 @@ class Dog < ActiveRecord::Base
     self.save
   end
 
-  def update_traits(trait_strings)
+  def update_traits(traits_string)
     self.traits = []
-    traits = trait_strings.map { |ts| Trait.find_by(trait_name: ts) }
+    traits = traits_string.map { |ts| Trait.find_by(trait_name: ts) }
     self.traits << traits
   end
 

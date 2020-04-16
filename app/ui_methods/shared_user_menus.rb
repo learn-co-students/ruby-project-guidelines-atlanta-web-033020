@@ -1,13 +1,11 @@
-def join_shelter_menu(user)
-  shelters = Shelter.shelters_not_joined(user)
-
-  choice = PROMPT.select("Which shelter would you like to join?") do |menu|
-    shelters.each_with_index do |s, i|
-      menu.choice "#{s.name} at #{s.address}", i
-    end
-  end
-
-  user.join_shelter(shelters[choice])
+def view_profile(user)
+  puts ""
+  puts "Your Profile:"
+  puts "Username: #{user.username}"
+  puts "Address: #{user.address}"
+  show_user_criteria(user)
+  puts "Press enter to return to Main Menu"
+  gets.chomp
 end
 
 def update_profile_menu(user)
@@ -31,24 +29,7 @@ def update_profile_menu(user)
   end
 end
 
-def show_user_criteria(user)
-  puts "Breed: #{user.dog_breed_preference}"
-  puts "Age:  #{user.dog_age_preference}"
-  user.traits.each_with_index do |t, i|
-    if i == 0
-      puts "Traits: #{t.trait_name}"
-    else
-      puts "        #{t.trait_name}"
-    end
-  end
-  puts ""
-end
-
 def adopt_from_foster_menu(user)
-  selection_valid = false
-  options = []
-  selection = nil
-  
   puts ""
   puts "Your criteria:"
   show_user_criteria(user)
@@ -56,31 +37,37 @@ def adopt_from_foster_menu(user)
   puts "Press Enter to search dogs with your criteria:"
   gets.chomp
   dogs = show_list_of_compatible_dogs(user)
-  dogs.each_with_index { |d, i| options << (i + 1).to_s}
 
   if dogs.empty?
     puts "Looks like all the dogs are adopted!"
+    puts "Press enter to return to the main menu."
+    gets.chomp
   else
-    puts "Please select a dog to adopt or type \"quit\" to quit"
-    while !selection_valid do
-      selection = gets.chomp
-      if selection == "quit"
-        break
+    choice = PROMPT.select("Please select a dog to adopt", per_page: 10) do |menu|
+      dogs.each_with_index do |d, i|
+        menu.choice "#{i + 1}. #{d.name} the #{d.breed}", i
       end
-      selection_valid = check_valid_selection(options, selection)
+      menu.choice "Nevermind, I don't want to adopt"
     end
     
-    if selection != "quit"
-      new_best_friend = dogs[selection.to_i - 1]
+    if choice != "Nevermind, I don't want to adopt"
+      new_best_friend = dogs[choice]
+    
       user.adopt_dog(new_best_friend)
     
       puts "Thank you for adopting #{new_best_friend.name}!"
       puts "I've never seen his tail wag so fast!"
+      puts "Press enter to return to the main menu."
+      gets.chomp
     end
   end
+end
 
-  puts "Press enter to return to the main menu."
-  gets.chomp
+def show_user_criteria(user)
+  puts "Traits: #{user.traits.map { |t| t.trait_name }.join(", ")}"
+  puts "Desired Dog Breed: #{user.dog_breed_preference}"
+  puts "Desired Dog Age:  #{user.dog_age_preference}"
+  puts ""
 end
 
 def show_list_of_compatible_dogs(user)
@@ -102,15 +89,6 @@ def show_list_of_compatible_dogs(user)
   end
   puts table.render(:unicode)
   dogs
-end
-
-def check_valid_selection(options, selection)
-  if options.include? selection
-    true
-  else
-    puts "Invalid selection received. Please choose again."
-    false
-  end
 end
 
 def get_address
@@ -135,4 +113,19 @@ def get_dog_name
   puts ""
   puts "Enter the dog's name"
   PROMPT.ask("Name:")
+end
+
+def join_shelter_menu(user)
+  shelters = Shelter.shelters_not_joined(user)
+
+  choice = PROMPT.select("Which shelter would you like to join?", per_page: 10) do |menu|
+    shelters.each_with_index do |s, i|
+      menu.choice "#{s.name} at #{s.address}", i
+    end
+    menu.choice "Nevermind, I don't want to join a shelter"
+  end
+
+  if choice != "Nevermind, I don't want to join a shelter"
+    user.join_shelter(shelters[choice])
+  end
 end

@@ -32,7 +32,9 @@ class User < ActiveRecord::Base
   def find_compatible_dogs
     dogs = []
     Dog.adoptable_dogs.each do |d|
-      dogs << { dog: d, dog_score: d.compute_dog_score(self) }
+      if d.owner_id != self.id
+        dogs << { dog: d, dog_score: d.compute_dog_score(self) }
+      end
     end
     ranked_dogs = dogs.sort_by { |dog_hash| dog_hash[:dog_score] }
   end

@@ -1,78 +1,53 @@
 def shelter_menu(shelter)
-  selection_valid = false
-  options = ["1", "2", "3", "4", "5"]
+  choices = ["Update Shelter Name", "Update Shelter Address", "Add Dog", "Update Dog", "Logout"]
+  choice = PROMPT.select("", choices)
 
-  puts "Select an option below:"
-  puts ""
-  puts "1. Update shelter name"
-  puts "2. Update shelter address"
-  puts "3. Add dog"
-  puts "4. Update dog"
-  puts "5. Logout"
-
-  while !selection_valid
-    selection = gets.chomp
-
-    if selection == "1"
-      shelter_update_name_menu(shelter)
-    elsif selection == "2"
-      shelter_update_address_menu(shelter)
-    elsif selection == "3"
-      shelter_add_dog_menu(shelter)
-    elsif selection == "4"
-      shelter_select_dog_to_update_menu(shelter)
-    elsif selection == "5" || selection.downcase == "quit"
-      logout
-      return true
-    end
-
-    selection_valid = check_valid_selection(options, selection)
+  case choice
+  when "Update Shelter Name"
+    shelter_update_name_menu(shelter)
+  when "Update Shelter Address"
+    shelter_update_address_menu(shelter)
+  when "Add Dog"
+    shelter_add_dog_menu(shelter)
+  when "Update Dog"
+    shelter_select_dog_to_update_menu(shelter)
+  when "Logout"
+    logout
   end
 end
 
 def shelter_update_name_menu(shelter)
   puts ""
   puts "Enter the new shelter name"
-  name = gets.chomp
-  shelter.update_name(name)
+  shelter.update_name(PROMPT.ask("Name:"))
 end
 
 def shelter_update_address_menu(shelter)
   puts ""
   puts "Enter the shelter address"
-  address = gets.chomp
-  shelter.update_address(address)
+  shelter.update_address(PROMPT.ask("Address:"))
 end
 
 def shelter_add_dog_menu(shelter)
   name = get_dog_name
   age = get_dog_age
   breed = get_dog_breed
-  traits = get_dog_traits
+  traits = select_traits
 
   shelter.add_dog(name, age, breed, traits)
 end
 
 def shelter_select_dog_to_update_menu(shelter)
-  selection_valid = false
-  options = []
+  dogs = shelter.dogs
 
-  while !selection_valid
-    index = 1
-    puts ""
-    puts "Select which dog you would like to update"
-    shelter.dogs.each do |dog|
-      puts "#{index}. #{dog.name}"
-      options << index.to_s
-      index += 1
+  puts ""
+  choice = PROMPT.select("Select which dog you would like to update") do |menu|
+    dogs.each_with_index do |d, i|
+      menu.choice "#{d.name} the #{d.breed}", i
     end
-    puts ""
-    selection = gets.chomp
-    
-    selection_valid = check_valid_selection(options, selection)
   end
 
-  update_dog_shelter_menu(shelter.dogs[selection.to_i - 1])
+  update_dog_shelter_menu(dogs[choice])
 end
 
 def update_dog_shelter_menu(dog)

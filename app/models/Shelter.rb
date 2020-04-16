@@ -13,9 +13,9 @@ class Shelter < ActiveRecord::Base
     self.save
   end
 
-  def add_dog(name, age, breed, traits)
+  def add_dog(name, age, breed, traits_string)
     dog = Dog.create(name: name, age: age, breed: breed)
-    dog.traits << traits
+    dog.update_traits(traits_string)
     self.dogs << dog
   end
 
