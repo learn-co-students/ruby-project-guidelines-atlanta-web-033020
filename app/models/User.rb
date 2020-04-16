@@ -45,6 +45,6 @@ class User < ActiveRecord::Base
   end
 
   def join_shelter(shelter)
-    self.shelters << shelter
+    Membership.create(user_id: self.id, shelter_id: shelter.id)
   end
 end
