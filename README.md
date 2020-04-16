@@ -2,6 +2,12 @@
 
 This CLI application simulates a dog shelter network management software. The purpose of this application is to provide management of dog data as dogs come into and are adopted out of shelters. Throught this application, a dog may be added to a shelter, adopted by a foster parent, and adopted by a regular adopter.
 
+## Install Instructions
+1. Clone this repository to your local machine.
+2. Once cloned, navigate to the base folder of this repository on your machine.
+3. Run bundle install in the terminal to install required gems.
+4. Run ruby bin/run.rb to run application.
+
 ## Application Structure and Rules
 
 ### Login
