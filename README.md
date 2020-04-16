@@ -4,9 +4,9 @@ This CLI application simulates a dog shelter network management software. The pu
 
 ## Install Instructions
 1. Clone this repository to your local machine.
-2. Once cloned, navigate to the base folder of this repository on your machine.
+2. Once cloned, navigate to the base folder of this repository.
 3. Run bundle install in the terminal to install required gems.
-4. Run ruby bin/run.rb to run application.
+4. Run ruby bin/run.rb to run this application.
 
 ## Application Structure and Rules
 
