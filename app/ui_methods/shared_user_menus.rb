@@ -16,47 +16,19 @@ def update_profile_menu(user)
   choice = PROMPT.select("What would you like to update?", choices)
   
   case choice
-  when 0
-    address_menu(user)
-  when 1
-    traits_menu(user)
-  when 2
-    desired_dog_breed_menu(user)
-  when 3
-    desired_dog_age_menu(user)
+  when "Address"
+    puts "Enter your address"
+    user.update_address(get_address)
+  when "Traits"
+    puts "Select your traits"
+    user.update_traits(select_traits)
+  when "Desired Dog Breed"
+    puts "Select desired dog breed"
+    user.update_breed_preference(get_dog_breed)
+  when "Desired Dog Age"
+    puts "Enter desired dog age"
+    user.update_dog_age_preference(get_dog_age)
   end
-end
-
-def address_menu(user)
-  puts ""
-  puts "Enter your address"
-  address = gets.chomp
-  user.update_address(address)
-end
-
-def traits_menu(user)
-  puts ""
-
-  choices = Trait.all.each_with_index.map { |t, i| "#{t.trait_name}" }
-  choice = PROMPT.multi_select("Select your traits:", choices)
-
-  user.update_traits(choice)
-end
-
-def desired_dog_breed_menu(user)
-  puts ""
-
-  choices = Dog.all.map { |dog| dog.breed }.uniq
-  choice = PROMPT.select("Select your desired dog breed", choices)
-
-  user.update_breed_preference(choice)
-end
-
-def desired_dog_age_menu(user)
-  puts ""
-  puts "Enter your desired dog age"
-  age = PROMPT.ask("Age:")
-  user.update_dog_age_preference(age)
 end
 
 def show_user_criteria(user)
@@ -141,68 +113,26 @@ def check_valid_selection(options, selection)
   end
 end
 
-def update_dog_menu(dog)
-  puts ""
-  choices = ["Name", "Age", "Breed", "Traits", "Back to Main Menu"]
-  choice = PROMPT.select("What would you like to update?", choices)
+def get_address
+  PROMPT.ask("Address:")
+end
 
-  case choice
-  when "Name"
-    dog.update_name(get_dog_name)
-  when "Age"
-    dog.update_age(get_dog_age)
-  when "Breed"
-    dog.update_breed(get_dog_breed)
-  when "Traits"
-    dog.update_traits(get_dog_traits)
-  end
+def select_traits
+  choices = Trait.all.each_with_index.map { |t, i| "#{t.trait_name}" }
+  PROMPT.multi_select("Select your traits:", choices)
+end
+
+def get_dog_breed
+  choices = Dog.all.map { |dog| dog.breed }.uniq
+  PROMPT.select("Select your desired dog breed", choices)
+end
+
+def get_dog_age
+  age = PROMPT.ask("Age:")
 end
 
 def get_dog_name
   puts ""
   puts "Enter the dog's name"
   PROMPT.ask("Name:")
-end
-
-def get_dog_age
-  puts ""
-  puts "Enter the dog's age"
-  PROMPT.ask("Age:").to_i
-end
-
-def get_dog_breed
-  dog_breeds = Dog.all.map { |dog| dog.breed }.uniq
-
-  selection_valid = false
-  options = []
-  selection = ""
-
-  while !selection_valid
-    index = 1
-    puts ""
-    puts "Select the dog's breed"
-    dog_breeds.each do |breed|
-      puts "#{index}. #{breed}"
-      options << index.to_s
-      index += 1
-    end
-    puts ""
-    selection  = gets.chomp
-    dog_breed = dog_breeds[selection.to_i - 1]
-
-    selection_valid = check_valid_selection(options, selection)
-  end
-  dog_breed
-end
-
-def get_dog_traits
-  trait_list = Trait.all
-  puts ""
-  puts "Select your traits separated by commas. i.e. 1,2,3"
-  trait_list.each_with_index { |t, index| puts "#{index + 1}. #{t.trait_name}" }
-  puts ""
-  user_input = gets.chomp
-  trait_nums = user_input.split(",")
-  trait_nums.map { |t| t.strip } # remove white space
-  .map { |t| trait_list[t.to_i - 1] } # map to trait instances
 end

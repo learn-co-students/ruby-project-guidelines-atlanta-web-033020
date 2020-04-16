@@ -2,17 +2,25 @@ def welcome
   puts "============================="
   puts "|  Wecome to Furry Finder!  |"
   puts "============================="
-  login
+  login_or_quit
+end
+
+def login_or_quit
+  choices = ["Login","Quit"]
+  choice = PROMPT.select("Select an option", choices)
+
+  case choice
+  when "Login"
+    login
+  when "Quit"
+    "quit"
+  end
 end
 
 def login
   puts ""
-  puts "Please enter your username to log in or type \"quit\" to quit:"
-  username_input = PROMPT.ask("Username:")
-
-  if username_input.downcase == "quit"
-    return "quit"
-  end
+  puts "Please enter your username to log in"
+  username_input = PROMPT.ask("Username:", required: true)
 
   if username_input.downcase == "shelter"
     LoggedInUser.type = "shelter"

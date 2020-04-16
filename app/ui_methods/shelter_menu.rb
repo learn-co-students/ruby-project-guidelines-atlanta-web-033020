@@ -72,5 +72,26 @@ def shelter_select_dog_to_update_menu(shelter)
     selection_valid = check_valid_selection(options, selection)
   end
 
-  update_dog_menu(shelter.dogs[selection.to_i - 1])
+  update_dog_shelter_menu(shelter.dogs[selection.to_i - 1])
+end
+
+def update_dog_shelter_menu(dog)
+  puts ""
+  choices = ["Name", "Age", "Breed", "Traits", "Back to Main Menu"]
+  choice = PROMPT.select("What would you like to update?", choices)
+
+  case choice
+  when "Name"
+    puts "Enter the dog's name"
+    dog.update_name(get_dog_name)
+  when "Age"
+    puts "Enter dog age"
+    dog.update_age(get_dog_age)
+  when "Breed"
+    puts "Select dog breed"
+    dog.update_breed(get_dog_breed)
+  when "Traits"
+    puts "Select dog traits"
+    dog.update_traits(select_traits)
+  end
 end

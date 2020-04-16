@@ -1,57 +1,34 @@
 def foster_menu(user)
-  selection_valid = false
-  options = ["1", "2", "3", "4", "5"]
+  choices = ["Update Profile", "Adopt a Dog", "Adopt a Shelter Dog",
+    "Manage Foster Dogs","Join Another Shelter", "Logout"]
+  choice = PROMPT.select("Selection an option below:", choices)
 
-  puts "Select an option below:"
-  puts ""
-  puts "1. Update profile"
-  puts "2. Adopt a dog"
-  puts "3. Adopt a shelter dog"
-  puts "4. Manage fostered dogs"
-  puts "5. Join another shelter"
-  puts "6. Logout"
-
-  while !selection_valid
-    selection = gets.chomp
-
-    if selection == "1"
-      update_profile_menu(user)
-    elsif selection == "2"
-      foster_adopt_dog_menu(user)
-    elsif selection == "3"
-      adopt_from_shelter_menu(user)
-    elsif selection == "4"
-      manage_fostered_dogs_menu(user)
-    elsif selection == "5"
-      join_shelter_menu(user)
-    elsif selection == "6" || selection.downcase == "quit"
-      logout
-      return true
-    end
-
-    selection_valid = check_valid_selection(options, selection)
+  case choice
+  when "Update Profile"
+    update_profile_menu(user)
+  when "Adopt a Dog"
+    foster_adopt_dog_menu(user)
+  when "Adopt a Shelter Dog"
+    adopt_from_shelter_menu(user)
+  when "Manage Foster Dogs"
+    manage_fostered_dogs_menu(user)
+  when "Join Another Shelter"
+    join_shelter_menu(user)
+  when "Logout"
+    logout
   end
 end
 
 def foster_adopt_dog_menu(user)
-  selection_valid = false
-  options = ["1", "2"]
-
-  puts "From where would you like to adopt a dog?"
   puts ""
-  puts "1. Shelter"
-  puts "2. Other Foster"
-
-  while !selection_valid
-    selection = gets.chomp
-
-    if selection == "1"
-      adopt_from_shelter_menu(user)
-    elsif selection == "2"
-      adopt_from_foster_menu(user)
-    end
-
-    selection_valid = check_valid_selection(options, selection)
+  choices = ["Shelter", "Other Foster"]
+  choice = PROMPT.select("From where would you like to adopt a dog?", choices)
+  
+  case choice
+  when "Shelter"
+    adopt_from_shelter_menu(user)
+  when "Other Foster"
+    adopt_from_foster_menu(user)
   end
 end
 
@@ -110,29 +87,45 @@ def show_list_of_dogs(dogs)
 end
 
 def manage_fostered_dogs_menu(user)
-  selection_valid = false
-  options = []
-  
+  puts ""
   dogs = user.dogs
 
-  puts "Select a dog to update"
-  puts ""
-  dogs.each_with_index do |d, i|
-    puts "#{i + 1}. #{d.name} the #{d.breed}"
-    options << (i + 1).to_s
-  end
-
-  puts "#{dogs.length + 1}. Quit"
-
-  while !selection_valid do
-    selection = gets.chomp
-    if selection == "quit" || selection == (dogs.length + 1).to_s
-      break
+  choice = PROMPT.select("Select a dog to update") do |menu|
+    dogs.each_with_index do |d, i|
+      menu.choice "#{d.name} the #{d.breed}", i
     end
-    selection_valid = check_valid_selection(options, selection)
   end
 
-  if selection != "quit" && selection != (dogs.length + 1).to_s
-    update_dog_menu(dogs[selection.to_i - 1])
+  update_dog_foster_menu(dogs[choice])
+end
+
+def update_dog_foster_menu(dog)
+  puts ""
+  choices = ["Name", "Age", "Breed", "Traits", "Make Adoption Ready", "Back to Main Menu"]
+  choice = PROMPT.select("What would you like to update?", choices)
+
+  case choice
+  when "Name"
+    puts "Enter the dog's name"
+    dog.update_name(get_dog_name)
+  when "Age"
+    puts "Enter dog age"
+    dog.update_age(get_dog_age)
+  when "Breed"
+    puts "Select dog breed"
+    dog.update_breed(get_dog_breed)
+  when "Traits"
+    puts "Select dog traits"
+    dog.update_traits(select_traits)
+  when "Make Adoption Ready"
+    make_adoption_ready_menu(dog)
+  end
+end
+
+def make_adoption_ready_menu(dog)
+  choices = ["Yes", "No"]
+  choice = PROMPT.select("Confirm #{dog.name} is ready for a new family!", choices)
+  if choice == "Yes"
+    dog.make_adoption_ready
   end
 end
