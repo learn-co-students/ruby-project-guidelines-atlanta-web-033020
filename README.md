@@ -14,7 +14,7 @@ This CLI application simulates a dog shelter network management software. The pu
 * Users may create a new username by entering a username onto the login screen.
 * There may not be duplicate usernames.
 * Once a username is defined, the user may log back into the application by using the same username.
-* *Shelters may log in by using the super secret keyword "shelter" at the login prompt and selecting a shelter.
+* Shelters may log in by using the super secret keyword "shelter" at the login prompt and selecting a shelter.
 
 ### Shelters
 * Shelters may view their own profile. Properties for a shelter include:
