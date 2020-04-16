@@ -15,13 +15,24 @@ There are a few rules that define the structure of this application
 4. Shelters may log in by using the super secret keyword "shelter" at the login prompt and selecting a shelter.
 
 #### Shelters
-1. A sheler can change its own properties including:
+1. Shelters can view their own profile. Properties for a shelter are:
    * Name
    * Address
-2. Shelters can add new dogs into themselves.
-3. Shelters can update dog properties including:
-   * 
+2. Shelters can change their own profile
+   * Address
+3. Shelters can add new dogs into themselves.
+4. Shelters can update their dogs' properties including:
+   * Name
+   * Age
+   * Breed
+   * Traits
 
 #### Adopters
+1. Adopters can view their own profile. Properties for adopters are:
+   * Name
+   * Address
+   * Traits
+   * Desired Dog Breed
+   * Desired Dog Age
 
 #### Foster Parents

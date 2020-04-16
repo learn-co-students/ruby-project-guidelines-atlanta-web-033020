@@ -1,11 +1,6 @@
 def adopter_menu(user)
   choices = ["View Profile", "Update Profile", "Adopt a Dog", "Become a Foster Parent", "Logout"]
-  choice = PROMPT.select("Select an option below:") do |menu|
-    menu.choice "Update Profile"
-    menu.choice "Adopt a Dog"
-    menu.choice "Become a Foster Parent", 2
-    menu.choice "Logout", 3
-  end
+  choice = PROMPT.select("Select an option below:", choices)
 
   case choice
   when "View Profile"

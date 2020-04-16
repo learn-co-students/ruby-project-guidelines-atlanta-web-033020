@@ -45,7 +45,7 @@ def login
 end
 
 def shelter_login
-  choice = PROMPT.select("Which shelter would you like to log in as?") do |menu|
+  choice = PROMPT.select("Which shelter would you like to log in as?", per_page: 10) do |menu|
     Shelter.all.each_with_index do |s, i|
       menu.choice "#{s.name} at #{s.address}", i
     end

@@ -1,8 +1,10 @@
 def shelter_menu(shelter)
-  choices = ["Update Shelter Name", "Update Shelter Address", "Add Dog", "Update Dog", "Logout"]
+  choices = ["View Profile", "Update Shelter Name", "Update Shelter Address", "Add Dog", "Update Dog", "Logout"]
   choice = PROMPT.select("", choices)
 
   case choice
+  when "View Profile"
+    shelter_view_profile(shelter)
   when "Update Shelter Name"
     shelter_update_name_menu(shelter)
   when "Update Shelter Address"
@@ -14,6 +16,15 @@ def shelter_menu(shelter)
   when "Logout"
     logout
   end
+end
+
+def shelter_view_profile(shelter)
+  puts ""
+  puts "Shelter Profile:"
+  puts "Name: #{shelter.name}"
+  puts "Address: #{shelter.address}"
+  puts "Press enter to return to Main Menu"
+  gets.chomp
 end
 
 def shelter_update_name_menu(shelter)
