@@ -2,8 +2,6 @@
 
 This CLI application simulates a dog shelter network management software. The purpose of this application is to provide management of dog data as dogs come into and are adopted out of shelters. Throught this application, a dog may be added to a shelter, adopted by a foster parent, and adopted by a regular adopter.
 
-#
-
 ## Application Structure and Rules
 
 ### Login
@@ -55,8 +53,6 @@ Adopters are users that have not joined a shelter.
 * Adopters may adopt a dog from foster parents only if the foster parent has declared the dog as adoption ready.
 * Adopters may not adopt dogs directly from a shelter.
 * Adopters can become a foster parent by joining a shelter.
-
-#
 
 ## Program Flow
 The program flow is largely based on the movement of dogs to different owners. The following will attempt to illustrate this ownership flow.
