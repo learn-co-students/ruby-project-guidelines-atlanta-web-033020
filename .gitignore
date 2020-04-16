@@ -10,5 +10,6 @@ tmp
 *.log
 *.swp
 *.docx
+*.ppt
 
 db/*.db

@@ -1,7 +1,6 @@
 def welcome
-  puts "============================="
-  puts "|  Wecome to Furry Finder!  |"
-  puts "============================="
+  font = TTY::Font.new(:doom)
+  puts font.write("Furry Finder")
   login_or_quit
 end
 
