@@ -1,6 +1,6 @@
 def shelter_menu(shelter)
   choices = ["View Profile", "Update Shelter Name", "Update Shelter Address", "Add Dog", "Update Dog", "Logout"]
-  choice = PROMPT.select("", choices)
+  choice = PROMPT.select("Select an option below:", choices)
 
   case choice
   when "View Profile"
