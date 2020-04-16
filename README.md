@@ -20,7 +20,7 @@ This CLI application simulates a dog shelter network management software. The pu
 * Shelters may view their own profile. Properties for a shelter include:
    * Name
    * Address
-* Shelters may update their all properties in thier profile
+* Shelters may update their all properties in thier profile.
 * Shelters may add new dogs into themselves.
 * Shelters may update their dogs' properties including:
    * Name
@@ -29,7 +29,7 @@ This CLI application simulates a dog shelter network management software. The pu
    * Traits
 
 #### Foster Parents
-Foster parents are users that have joined at least one shelter
+Foster parents are users that have joined at least one shelter.
 * Foster parents may view their own profile. Properties for foster parents include:
    * Username
    * Address
