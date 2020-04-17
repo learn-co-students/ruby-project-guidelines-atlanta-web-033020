@@ -24,7 +24,7 @@ class Event < ActiveRecord::Base
 
     def self.event_instances_without_user(user)
         self.all_event_instance_with_names.select do |k, v|
-            v.user != user
+            v.user != user && v.user != nil
         end
     end
 end

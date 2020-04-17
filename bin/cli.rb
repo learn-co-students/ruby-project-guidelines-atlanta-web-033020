@@ -67,17 +67,20 @@ class Cli
             menu.enum '.'
             menu.choice 'See My Events', 1
             menu.choice 'Make a New Event', 2
-            menu.choice 'Join an Existing Event', 3, disabled: '>> Not Functioning Yet <<'
-            menu.choice 'Remove My Account', 4
-            menu.choice 'Log Out', 5
+            menu.choice 'Change My Name', 3
+            menu.choice 'Join an Existing Event', 4, disabled: '>> Not Functioning Yet <<'
+            menu.choice 'Remove My Account', 5
+            menu.choice 'Log Out', 6
         end
         if user_input == 1
             user_events()
         elsif user_input == 2
             make_new_event()
         elsif user_input == 3
-            join_existing_event()
+            update_user()
         elsif user_input == 4
+            join_existing_event()
+        elsif user_input == 5
             confirmation_input = @tty.select("Are you sure?") do |menu|
                 menu.enum '.'
                 menu.choice 'Yes I am sure', 1
@@ -92,6 +95,16 @@ class Cli
             start_menu()
             @user = nil
         end
+    end
+
+    def update_user()
+        newName = @tty.ask("What is your new desired name?", default: @user.user_name)
+        @user.user_name = newName
+        @user.save
+        @user = User.find(@user.id)
+        @user_hash = Event.event_instance_with_names(@user)
+        @tty.keypress("Your new username is #{@user.user_name}. You will now be returned to the previous menu.")
+        third_menu()
     end
 
     def join_existing_event()
@@ -112,6 +125,7 @@ class Cli
         party = UserEvent.create(date: new_date, user: @user, event: event)
         @tty.keypress("The event titled #{party.event.event_name} at #{party.date} has been successfully created for #{@user.user_name}. You will now be returned to the previous menu.")
         @user = User.find(@user.id)
+        @user_hash = Event.event_instance_with_names(@user)
         third_menu()
     end
 
@@ -161,6 +175,8 @@ class Cli
             event.date = newDate
             event.save
             @tty.keypress("The new date for #{event.event.event_name} is #{event.date}. Press any key to return to the Previous Menu")
+            @user = User.find(@user.id)
+            @user_hash = Event.event_instance_with_names(@user)
             user_events()
         elsif option == 2
             newName = @tty.ask("What is the new name for this Event?") do |q|
@@ -168,7 +184,9 @@ class Cli
             end
             event.event.event_name = newName
             event.event.save
-            @tty.keypress("The new name for this event is #{event.event.event_name}")
+            @tty.keypress("The new name for this event is #{event.event.event_name}. Press any key to return to the previous menu")
+            @user = User.find(@user.id)
+            @user_hash = Event.event_instance_with_names(@user)
             user_events()
         else
             user_events()
