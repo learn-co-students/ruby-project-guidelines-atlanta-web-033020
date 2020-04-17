@@ -1,59 +1,79 @@
-# Module One Final Project Guidelines
+# Furry Finder CLI APP
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
+This CLI application simulates a dog shelter network management software. The purpose of this application is to provide management of dog data as dogs come into and are adopted out of shelters. Throught this application, a dog may be added to a shelter, adopted by a foster parent, and adopted by a regular adopter.
 
-For your final project, we'll be building a Command Line database application.
+[Application Demo Video](https://www.youtube.com/watch?v=-KWNAtVLtwc)
 
-## Project Requirements
+## Install Instructions
+1. Clone this repository to your local machine.
+2. Once cloned, navigate to the base folder of this repository.
+3. Run bundle install in the terminal to install required gems.
+4. Run ruby bin/run.rb to run this application.
 
-### Option One - Data Analytics Project
+## Application Structure and Rules
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+### Login
+* Users may create a new username by entering a username onto the login screen.
+* There may not be duplicate usernames.
+* Once a username is defined, the user may log back into the application by using the same username.
+* Shelters may log in by using the super secret keyword "shelter" at the login prompt and selecting a shelter.
 
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
+### Shelters
+* Shelters may view their own profile. Properties for a shelter include:
+   * Name
+   * Address
+* Shelters may update their all properties in thier profile.
+* Shelters may add new dogs into themselves.
+* Shelters may update their dogs' properties including:
+   * Name
+   * Age
+   * Breed
+   * Traits
 
-### Option Two - Command Line CRUD App
+#### Foster Parents
+Foster parents are users that have joined at least one shelter.
+* Foster parents may view their own profile. Properties for foster parents include:
+   * Username
+   * Address
+   * Traits
+   * Desired Dog Breed
+   * Desired Dog Age
+* Foster parents may update all items in their profile except username.
+* Foster parents may adopt a dog from other foster parents if the dog has been declared as adoption ready.
+* Foster parents may adopt a dog from only the shelters to which they belong.
+* Foster parents may update their dogs' properties including:
+   * Name
+   * Age
+   * Breed
+   * Traits
+   * Adoption Ready
+* Foster parents can join shelters for which they do not already belong.
+* Foster parents may delete their account. In doing so, the fostered dogs that they own are sent back to the shelter as non-adoption ready dogs.
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
-4. Use good OO design patterns. You should have separate models for your runner and CLI interface.
+#### Adopters
+Adopters are users that have not joined a shelter.
+* Adopters may view their own profile. Properties for adopters include:
+   * Username
+   * Address
+   * Traits
+   * Desired Dog Breed
+   * Desired Dog Age
+* Adopters may update all items in their profile except username.
+* Adopters may adopt a dog from foster parents only if the foster parent has declared the dog as adoption ready.
+* Adopters may not adopt dogs directly from a shelter.
+* Adopters can become a foster parent by joining a shelter.
+* Adopters can delete their account.
 
-### Brainstorming and Proposing a Project Idea
+## Program Flow
+The program flow is largely based on the movement of dogs to different owners. The following will attempt to illustrate this ownership flow.
 
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. In example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
+#### Dog Added to Shelter
+When a dog is added to the shelter, the shelter enters a name, age, breed, and traits of the dog. While the dog is at the shelter, the shelter may update any of the dog's properties. 
 
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
+#### Dog Adoption by Foster Parent
+Only a foster parent may adopt a dog from a shelter. Once adopted, the ability to update the dog's properties is transferred to the foster parent. In addition to name, age, breed, and traits, the adopter may also declare the dog as adoption ready. Once adoption ready, the dog may be adopted by regular adopters.
 
-## Instructions
+It is worth noting that foster parents may adopt from other foster parents, however, they are considered as regular adopters when doing so. Therefore, a foster parent is not allowed to adopt a dog from a foster parent if the dog is not declared as adoption ready.
 
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributors guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project.(2 minutes max)
-6. Prepare a presentation to follow your video.(3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address, if anything, what you would change or add to what you have today?
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
-
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+#### Dog Adoption by Regular Adopter
+As stated before, regular adopters may not adopt dogs directly from the shelter. They may only adopt a dog once the dog has been considered "adoption ready" by the foster parent. Once adopted, the dog's shelter and foster parent attachments are cleared, and the adopter becomes the new owner of the dog. Since adopted dogs are no longer part of the shelter system, an adopted dog's properties may not be altered in this application.

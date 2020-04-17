@@ -9,5 +9,8 @@ tmp
 *.iml
 *.log
 *.swp
+*.docx
+*.pptx
+*.mp4
 
 db/*.db
