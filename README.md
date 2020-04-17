@@ -48,7 +48,7 @@ Foster parents are users that have joined at least one shelter.
    * Traits
    * Adoption Ready
 * Foster parents can join shelters for which they do not already belong.
-* Foster parents may delete their account. In doing so, the dogs that they own are sent back to the shelter as non-adoption ready dogs.
+* Foster parents may delete their account. In doing so, the fostered dogs that they own are sent back to the shelter as non-adoption ready dogs.
 
 #### Adopters
 Adopters are users that have not joined a shelter.
