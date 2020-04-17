@@ -247,8 +247,8 @@ class Gametracker
 
         user_reviews = Review.all_from_user(current_user)
 
-        if user_reviews.find{|r| r.game_id = game.id}
-            Puts "Sorry you have already reviewed this game"
+        if user_reviews.find{|r| r.game_id == game.id}
+            puts "Sorry you have already reviewed this game"
         else
             score = prompt.ask("You chose #{game.name}. Please enter a score.").to_i
             text = prompt.ask("You gave it an #{score}. Please enter a description")
@@ -299,7 +299,7 @@ class Gametracker
     end
 
     def update_menu
-        tay_in_menu = true
+        stay_in_menu = true
 
         while stay_in_menu do
             case prompt.select("What would you like to do?",["Select a Review to Update", "Back"])
@@ -324,7 +324,7 @@ class Gametracker
         review = reviews[game_name_arr.find_index(chosen_game)]
 
         review.score = prompt.ask("Please enter a new score")
-        review.text = prompt.ask("You gave it an #{review.score}. Please enter a description")
+        review.review_text = prompt.ask("You gave it an #{review.score}. Please enter a description")
         review.save
         puts "Thank you, your new review is:"
         print_review(review)

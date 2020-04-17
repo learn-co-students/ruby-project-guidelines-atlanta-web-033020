@@ -18,8 +18,6 @@ while !gt.current_user do
     end
 end
 
-binding.pry
-
 
 while continue_running do
     selection = gt.main_selection
