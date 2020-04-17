@@ -39,14 +39,28 @@ class User < ActiveRecord::Base
     ranked_dogs = dogs.sort_by { |dog_hash| dog_hash[:dog_score] }
   end
 
-  def adopt_dog(dog)
+  def adopt_shelter_dog(dog)
     dog.adoption_ready = false
-    dog.shelter = nil
     dog.save
     self.dogs << dog
   end
 
+  def adopt_dog(dog)
+    dog.destroy
+  end
+
   def join_shelter(shelter)
     Membership.create(user_id: self.id, shelter_id: shelter.id)
+  end
+
+  def delete_account
+    self.dogs.each do |d| 
+      d.adoption_ready = false
+      d.owner_id = nil
+      d.save
+    end
+    memberships = self.memberships.select { |m| m.user = self }
+    memberships.each { |m| m.destroy }
+    self.destroy
   end
 end

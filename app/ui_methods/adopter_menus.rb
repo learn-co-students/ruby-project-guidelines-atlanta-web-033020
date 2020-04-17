@@ -1,5 +1,5 @@
 def adopter_menu(user)
-  choices = ["View Profile", "Update Profile", "Adopt a Dog", "Become a Foster Parent", "Logout"]
+  choices = ["View Profile", "Update Profile", "Adopt a Dog", "Become a Foster Parent", "Logout", "Delete Account"]
   choice = PROMPT.select("Select an option below:", choices)
 
   case choice
@@ -13,5 +13,7 @@ def adopter_menu(user)
     join_shelter_menu(user)
   when "Logout"
     logout
+  when "Delete Account"
+    delete_account(user)
   end
 end

@@ -1,6 +1,6 @@
 def foster_menu(user)
   choices = ["View Profile", "Update Profile", "Adopt a Dog", "Adopt a Shelter Dog",
-    "Manage Foster Dogs","Join Another Shelter", "Logout"]
+    "Manage Foster Dogs","Join Another Shelter", "Logout", "Delete Account"]
   choice = PROMPT.select("Selection an option below:", choices, per_page: 8)
 
   case choice
@@ -18,6 +18,8 @@ def foster_menu(user)
     join_shelter_menu(user)
   when "Logout"
     logout
+  when "Delete Account"
+    delete_account(user)
   end
 end
 
@@ -52,7 +54,7 @@ def adopt_from_shelter_menu(user)
     
     if choice != "Nevermind, I don't want to adopt"
       new_best_friend = dogs[choice]
-      user.adopt_dog(new_best_friend)
+      user.adopt_shelter_dog(new_best_friend)
     
       puts "#{new_best_friend.name} will make a lovely addition to your home!"
 
@@ -84,14 +86,19 @@ end
 def manage_fostered_dogs_menu(user)
   puts ""
   dogs = user.dogs
-
-  choice = PROMPT.select("Select a dog to update") do |menu|
-    dogs.each_with_index do |d, i|
-      menu.choice "#{d.name} the #{d.breed}", i
+  if dogs.empty?
+    puts "Looks like you have no dogs to update"
+    puts "Press enter to return to the main menu"
+    gets.chomp
+  else
+    choice = PROMPT.select("Select a dog to update") do |menu|
+      dogs.each_with_index do |d, i|
+        menu.choice "#{d.name} the #{d.breed}", i
+      end
     end
+  
+    update_dog_foster_menu(dogs[choice])
   end
-
-  update_dog_foster_menu(dogs[choice])
 end
 
 def update_dog_foster_menu(dog)

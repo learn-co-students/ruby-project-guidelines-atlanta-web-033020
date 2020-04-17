@@ -129,3 +129,13 @@ def join_shelter_menu(user)
     user.join_shelter(shelters[choice])
   end
 end
+
+def delete_account(user)
+  puts ""
+  choices = ["Yes", "No"]
+  choice = PROMPT.select("Are you sure you want to delete your account?", choices)
+
+  if choice == "Yes"
+    user.delete_account
+  end
+end
