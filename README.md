@@ -2,7 +2,7 @@
 
 This CLI application simulates a dog shelter network management software. The purpose of this application is to provide management of dog data as dogs come into and are adopted out of shelters. Throught this application, a dog may be added to a shelter, adopted by a foster parent, and adopted by a regular adopter.
 
-[Application Demo Video](https://www.youtube.com/watch?v=wcUXqlvK7MQ)
+[Application Demo Video](https://www.youtube.com/watch?v=-KWNAtVLtwc)
 
 ## Install Instructions
 1. Clone this repository to your local machine.

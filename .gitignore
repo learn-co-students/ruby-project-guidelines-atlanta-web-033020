@@ -11,5 +11,6 @@ tmp
 *.swp
 *.docx
 *.pptx
+*.mp4
 
 db/*.db
