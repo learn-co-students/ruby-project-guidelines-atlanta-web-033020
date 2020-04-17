@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
     has_many :user_event
     has_many :event, through: :user_event
+    has_many :attendees, class_name: "User", foreign_key: "index_users_on_creator_id"
+    belongs_to :creator, class_name: "User"
 
     def newEvent(date, event)
         event_instance = Event.create(event_name: event)
