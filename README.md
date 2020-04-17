@@ -33,3 +33,8 @@ This project was designed as a basic calendar that is capable of storing and per
 - End Users are able to move forward and back in the menus to complete tasks
 
 # Install Instructions
+1. Fork and Clone this repository and navigate in your text editor (I use VS Code) to the file directory
+2. Use the Command "bundle install" to install various gems
+3. Use the Command "gem install 'tty-prompt'" to ensure that the gem TTY Prompt is installed
+4. Use the Command "ruby bin/run.rb" to run the file
+5. Enjoy
