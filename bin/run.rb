@@ -3,7 +3,7 @@ require_relative '../config/environment'
 gt = Gametracker.new
 continue_running = true
 
-#binding.pry
+
 
 gt.welcome
 
@@ -17,6 +17,8 @@ while !gt.current_user do
         gt.login
     end
 end
+
+binding.pry
 
 
 while continue_running do

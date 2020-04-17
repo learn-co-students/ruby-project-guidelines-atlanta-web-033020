@@ -185,7 +185,7 @@ class Gametracker
         stay_in_menu = true
 
         while stay_in_menu do
-            case prompt.select("What would you like to see?",["All Reviews", "Most recent", "Highest Ratings", "Back"])
+            case prompt.select("What would you like to see?",["All Reviews", "Most recent", "Highest Ratings", "My Reviews", "Back"])
             when "All Reviews"
                 self.print_reviews(Review.all)
                 self.wait
@@ -194,6 +194,9 @@ class Gametracker
                 self.wait
             when "Highest Ratings"
                 self.print_reviews(Review.all_by_rating)
+                self.wait
+            when "My Reviews"
+                self.print_reviews(Review.all_from_user(current_user))
                 self.wait
             when "Back"
                 stay_in_menu = false
@@ -221,9 +224,14 @@ class Gametracker
         end
     end
 
-    def game_select
+    def review_game
         games_found = false
-        while !games_found
+        game_selected = false
+        game_name = nil
+        game = nil
+        game_arr = []
+        game_name_arr = []
+        while !games_found do
             game_name = prompt.ask("Please type in a game name to search")
             game_arr = Game.all.select{|g| g.name.downcase.include?(game_name.downcase)}
             if game_arr == nil
@@ -232,7 +240,23 @@ class Gametracker
                 games_found = true
             end
         end
-        
+        game_name_arr = game_arr.map{|g|g.name}
+        puts "============================================================================"
+
+        game = game_arr[game_name_arr.find_index(prompt.enum_select("Please select the game to review", game_name_arr))]
+
+        user_reviews = Review.all_from_user(current_user)
+
+        if user_reviews.find{|r| r.game_id = game.id}
+            Puts "Sorry you have already reviewed this game"
+        else
+            score = prompt.ask("You chose #{game.name}. Please enter a score.").to_i
+            text = prompt.ask("You gave it an #{score}. Please enter a description")
+
+            puts "Thank you for the review"
+            puts "Your review is:"
+            print_review(Review.create({game_id: game.id, user_id: current_user.id, date: Time.now.strftime("%m/%d/%Y"), score: score, review_text: text}))
+        end
     end
 
     def review_menu
@@ -241,8 +265,7 @@ class Gametracker
         while stay_in_menu do
             case prompt.select("What would you like to do?",["Find Game to Review", "Back"])
             when "Find Game to Review"
-                game = game_select
-
+                review_game
                 self.wait
             when "Back"
                 stay_in_menu = false
@@ -254,15 +277,9 @@ class Gametracker
         stay_in_menu = true
 
         while stay_in_menu do
-            case prompt.select("What would you like to see?",["All Users", "Most Active", "Critics Only", "Back"])
-            when "All Users"
-                self.print_users(User.all)
-                self.wait
-            when "Most Active"
-                self.print_users(User.all_by_reviews)
-                self.wait
-            when "Critics Only"
-                self.print_users(User.critics)
+            case prompt.select("What would you like to do?",["Select a Review to Delete", "Back"])
+            when "Select a Review to Delete"
+                delete_review
                 self.wait
             when "Back"
                 stay_in_menu = false
@@ -270,7 +287,47 @@ class Gametracker
         end
     end
 
+    def delete_review
+        reviews = Review.all_from_user(current_user)
+        if reviews == nil
+            puts "Sorry you have no reviews."
+            return
+        end
+        game_name_arr = reviews.map{|r|r.game.name}
+        chosen_game = prompt.enum_select("Please select a review to delete", game_name_arr)
+        reviews[game_name_arr.find_index(chosen_game)].destroy
+    end
+
     def update_menu
+        tay_in_menu = true
+
+        while stay_in_menu do
+            case prompt.select("What would you like to do?",["Select a Review to Update", "Back"])
+            when "Select a Review to Update"
+                update_review
+                self.wait
+            when "Back"
+                stay_in_menu = false
+            end
+        end
+    end
+
+    def update_review
+        reviews = Review.all_from_user(current_user)
+        if reviews == nil
+            puts "Sorry you have no reviews."
+            return
+        end
+        game_name_arr = reviews.map{|r|r.game.name}
+        chosen_game = prompt.enum_select("Please select a review to delete", game_name_arr)
+
+        review = reviews[game_name_arr.find_index(chosen_game)]
+
+        review.score = prompt.ask("Please enter a new score")
+        review.text = prompt.ask("You gave it an #{review.score}. Please enter a description")
+        review.save
+        puts "Thank you, your new review is:"
+        print_review(review)
 
     end
 
