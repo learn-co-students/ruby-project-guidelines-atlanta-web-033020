@@ -6,6 +6,8 @@ class Gametracker
         @prompt = TTY::Prompt.new
         @delete = Delete.new
         @update = Update.new
+        @review_menu = Review_menu.new
+        @user_menu = User_menu.new
     end
 
     def welcome
@@ -159,51 +161,28 @@ class Gametracker
         puts ""
     end
 
-    def print_reviews(reviews, limit = nil)
+    def self.print_reviews(prompt, reviews, limit = nil)
         if reviews.length == 0
             puts "Sorry you have no reviews"
             return
         end
         if !limit
             reviews.each do |review| 
-                print_review(review)
+                print_review(review,prompt)
             end
         else
             i=0
             limit.times do
-                print_review(reviews[i])
+                print_review(reviews[i],prompt)
                 i += 1
             end
         end
     end
 
-    def print_user(user)
+    def self.print_user(user,prompt)
         puts "====================================================================================================================="
         puts "ID: #{user.id}   User: #{user.username}   Critic?: #{user.critic?}"
         puts ""
-    end
-
-    def print_users(users, limit = nil)
-        if !limit
-            users.each do |user| 
-                print_user(user)
-            end
-        else
-            i=0
-            limit.times do
-                print_user(users[i])
-                i += 1
-            end
-        end
-        usernames = users.map{|u| u.username}
-        usernames << "Exit"
-        chosen_username = prompt.enum_select("Please choose a user to see thier reviews.", usernames)
-        
-        return if chosen_username == "Exit"
-
-        chosen_index = usernames.find_index(chosen_username)
-        puts "Here are #{chosen_username}'s reviews."
-        print_reviews(Review.all_from_user(users[chosen_index]))
     end
 
     def view_review_menu
@@ -212,16 +191,16 @@ class Gametracker
         while stay_in_menu do
             case prompt.select("What would you like to see?",["All Reviews", "Most recent", "Highest Ratings", "My Reviews", "Back"])
             when "All Reviews"
-                self.print_reviews(Review.all)
+                Review_viewer.print_reviews(prompt, Review.all)
                 self.wait
             when "Most recent"
-                self.print_reviews(Review.most_recent, 10)
+                Review_viewer.print_reviews(prompt, Review.most_recent, 10)
                 self.wait
             when "Highest Ratings"
-                self.print_reviews(Review.all_by_rating, 10)
+                Review_viewer.print_reviews(prompt, Review.all_by_rating, 10)
                 self.wait
             when "My Reviews"
-                self.print_reviews(Review.all_from_user(current_user))
+                Review_viewer.print_reviews(prompt,Review.all_from_user(current_user))
                 self.wait
             when "Back"
                 stay_in_menu = false
@@ -230,72 +209,11 @@ class Gametracker
     end
 
     def user_menu
-        stay_in_menu = true
-
-        while stay_in_menu do
-            case prompt.select("What would you like to see?",["All Users", "Most Active", "Critics Only", "Back"])
-            when "All Users"
-                self.print_users(User.all)
-                self.wait
-            when "Most Active"
-                self.print_users(User.all_by_reviews)
-                self.wait
-            when "Critics Only"
-                self.print_users(User.critics)
-                self.wait
-            when "Back"
-                stay_in_menu = false
-            end
-        end
-    end
-
-    def review_game
-        games_found = false
-        game_selected = false
-        game_name = nil
-        game = nil
-        game_arr = []
-        game_name_arr = []
-        while !games_found do
-            game_name = prompt.ask("Please type in a game name to search")
-            game_arr = Game.all.select{|g| g.name.downcase.include?(game_name.downcase)}
-            if game_arr.length == 0
-                puts "Sorry no game found. Please Try Again"
-            else
-                games_found = true
-            end
-        end
-        game_name_arr = game_arr.map{|g|g.name}
-        puts "============================================================================"
-
-        game = game_arr[game_name_arr.find_index(prompt.enum_select("Please select the game to review", game_name_arr))]
-
-        user_reviews = Review.all_from_user(current_user)
-
-        if user_reviews.find{|r| r.game_id == game.id}
-            puts "Sorry you have already reviewed this game"
-        else
-            score = prompt.ask("You chose #{game.name}. Please enter a score.").to_i
-            text = prompt.ask("You gave it an #{score}. Please enter a description")
-
-            puts "Thank you for the review"
-            puts "Your review is:"
-            print_review(Review.create({game_id: game.id, user_id: current_user.id, date: Time.now.strftime("%m/%d/%Y"), score: score, review_text: text}))
-        end
+        @user_menu.user_menu(prompt)
     end
 
     def review_menu
-        stay_in_menu = true
-
-        while stay_in_menu do
-            case prompt.select("What would you like to do?",["Find Game to Review", "Back"])
-            when "Find Game to Review"
-                review_game
-                self.wait
-            when "Back"
-                stay_in_menu = false
-            end
-        end
+        @review_menu.review_menu(current_user,prompt)
     end
 
     def delete_menu
