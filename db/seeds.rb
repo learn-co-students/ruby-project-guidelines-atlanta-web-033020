@@ -60,7 +60,7 @@ users = [
 
 users.each do |user|
     20.times do
-        Review.create({game_id: games[rand(games.length)].id, user_id: user.id, date: "4/15/2020", score: rand(1..10), review_text: Faker::Lorem.sentence(word_count: 5)})
+        Review.create({game_id: games[rand(games.length)].id, user_id: user.id, date: "#{rand(1..12)}/#{rand(1..28)}/#{rand(2017..2020)}", score: rand(1..10), review_text: Faker::Lorem.sentence(word_count: 5)})
     end
 end
 
